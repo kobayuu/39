@@ -14,7 +14,7 @@ int mapSetUp();
 Player * playerSetUp();
 int handleInput(int input, Player * user);
 int playerMove(int y, int x, Player * user);
-
+int checkPosition(int newY, int newX, Player * user);
 
 int main()/* main*/
 {
@@ -59,19 +59,19 @@ int mapSetUp() /*imprime o campo*/
 	mvprintw(18,13,"--------");
 
 
-		mvprintw(2,40,"--------");
-        mvprintw(3,40,"|......|");
-        mvprintw(4,40,"|......|");
-        mvprintw(5,40,"|......|");
-        mvprintw(6,40,"|......|");
-        mvprintw(7,40,"--------");
+	mvprintw(2,40,"--------");
+    mvprintw(3,40,"|......|");
+    mvprintw(4,40,"|......|");
+    mvprintw(5,40,"|......|");
+    mvprintw(6,40,"|......|");
+    mvprintw(7,40,"--------");
 
 
-        	mvprintw(11,40,"|..........|");
-        	mvprintw(12,40,"|..........|");
-        	mvprintw(13,40,"|..........|");
-        	mvprintw(14,40,"|..........|");
-       		mvprintw(15,40,"------------");
+    mvprintw(11,40,"|..........|");
+    mvprintw(12,40,"|..........|");
+    mvprintw(13,40,"|..........|");
+    mvprintw(14,40,"|..........|");
+    mvprintw(15,40,"------------");
 
 
 }
@@ -93,32 +93,66 @@ Player * playerSetUp()
 
 int handleInput(int input, Player * user)
 {
+	int newY;
+	int newX;
 	switch(input)
 	{
 		/*move para cima*/
 		case 'w':
 		case 'W':
-			playerMove(user->yPosition -1 , user->xPosition, user);
+			newY = user->yPosition -1;
+			newX = user->xPosition;
+
+				//playerMove(user->yPosition -1 , user->xPosition, user);
 			break;
 		/*move para direita*/
 		case 's':
 		case 'S':
-			playerMove(user->yPosition +1, user->xPosition, user);
+			newY = user->yPosition +1;
+			newX = user->xPosition;
+				//playerMove(user->yPosition +1, user->xPosition, user);
 			break;
 		/*move para esquerda*/
 		case 'a':
 		case 'A':
-			playerMove(user->yPosition , user->xPosition -1, user);
+			newY = user->yPosition;
+			newX = user->xPosition - 1;
+				//playerMove(user->yPosition , user->xPosition -1, user);
 			break;
 		/*move para a direita*/
 		case 'd':
 		case 'D':
-			playerMove(user->yPosition, user->xPosition +1, user);
+			newY = user->yPosition;
+			newX = user->xPosition + 1;
+
+				//playerMove(user->yPosition, user->xPosition +1, user);
 			break;
 
 		default:
 			break;
 	}
+
+	checkPosition(newY,newX, user);
+
+
+}
+
+/*checa o que há na proxima posição*/
+int checkPosition(int newY,int newX, Player * user)
+{
+	int space;
+	switch(mvinch(newY, newX))/*checa os casos de tecla*/
+	{
+		case '.':
+			playerMove(newY, newX, user);
+			break;
+		default:
+			move(user->yPosition, user->xPosition);/* deixa a seleção sempre em cima da tecla*/
+			break;
+
+	}
+
+
 }
 
 int playerMove(int y, int x, Player * user)
